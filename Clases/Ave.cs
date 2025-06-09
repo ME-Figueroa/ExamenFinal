@@ -5,8 +5,13 @@ namespace ExamenFinal.Clases
     public class Ave:Animal
     {
         [Required(ErrorMessage ="Seleccione una opcion valida")]
-        public string pico { get; set; }
+        public string? pico { get; set; }
 
-        public bool? vuela { get; set; }
+        public bool vuela { get; set; }
+
+        public Ave()
+        {
+            this.especie = "Ave";
+        }
     }
 }

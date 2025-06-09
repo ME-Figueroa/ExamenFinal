@@ -7,6 +7,11 @@ namespace ExamenFinal.Clases
         [Required(ErrorMessage ="Ingrese una opcion valida")]
         public string? pelaje { get; set; }
 
-        public bool? domestico { get; set; }
+        public bool domestico { get; set; }
+
+        public Gato()
+        {
+            this.especie = "Gato";
+        }
     }
 }

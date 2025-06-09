@@ -12,6 +12,6 @@ namespace ExamenFinal.Clases
         "Ingrese una especie valida")]public string? especie { get; set; }
 
         [Required]
-        [Range(1,70,ErrorMessage ="Ingrese una edad valida")]public int? anios { get; set; }
+        [Range(1,70,ErrorMessage ="Ingrese una edad valida")]public int? edad { get; set; }
     }
 }
