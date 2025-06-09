@@ -1,0 +1,17 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ExamenFinal.Clases
+{
+    public class Animal
+    {
+
+        [Required(ErrorMessage =
+        "Ingrese un nombre valido")] public string? nombre { get; set; }
+
+        [Required(ErrorMessage =
+        "Ingrese una especie valida")]public string? especie { get; set; }
+
+        [Required]
+        [Range(1,70,ErrorMessage ="Ingrese una edad valida")]public int? anios { get; set; }
+    }
+}
