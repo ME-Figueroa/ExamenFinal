@@ -129,6 +129,9 @@
             aves.Add(ave);
             localStorage.SetItem("Aves", aves);
         }
+
+        Animal.cantidadAnimal++;
+        localStorage.SetItem("CantidadAnimales", Animal.cantidadAnimal);
     }
 
     protected override async Task OnInitializedAsync()
@@ -152,6 +155,12 @@
         if (avesGuardadas != null)
         {
             aves = avesGuardadas;
+        }
+
+        var cantidadAnimales = localStorage.GetItem<int>("CantidadAnimales");
+        if(cantidadAnimales > 0)
+        {
+            Animal.cantidadAnimal = cantidadAnimales;
         }
     }
 }

@@ -1,0 +1,114 @@
+﻿@page "/Pacientes"
+@inject HttpClient Http
+@using ExamenFinal.Clases
+@inject Blazored.LocalStorage.ISyncLocalStorageService localStorage
+
+<PageTitle>Weather</PageTitle>
+
+<h1>Lista de Pacientes</h1>
+
+<h5>Cantidad de animales: @Animal.cantidadAnimal</h5>
+
+@if (perros == null && gatos==null && aves==null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Especie</th>
+                <th>Edad</th>
+                <th>Raza</th>
+                <th>Tamaño</th>
+                <th>Pelaje</th>
+                <th>Domestico</th>
+                <th>Pico</th>
+                <th>Vuela</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var perro in perros)
+            {
+                <tr>
+                    <td>@perro.nombre</td>
+                    <td>@perro.especie</td>
+                    <td>@perro.edad</td>
+                    <td>@perro.raza</td>
+                    <td>@perro.tamaño</td>
+                    <td>NA</td>
+                    <td>NA</td>
+                    <td>NA</td>
+                    <td>NA</td>
+                </tr>
+            }
+            @foreach (var gato in gatos)
+            {
+                <tr>
+                    <td>@gato.nombre</td>
+                    <td>@gato.especie</td>
+                    <td>@gato.edad</td>
+                    <td>NA</td>
+                    <td>NA</td>
+                    <td>@gato.pelaje</td>
+                    <td>@(gato.domestico? "Sí" : "No")</td>
+                    <td>NA</td>
+                    <td>NA</td>
+                </tr>
+            }
+            @foreach (var ave in aves)
+            {
+                <tr>
+                    <td>@ave.nombre</td>
+                    <td>@ave.especie</td>
+                    <td>@ave.edad</td>
+                    <td>NA</td>
+                    <td>NA</td>
+                    <td>NA</td>
+                    <td>NA</td>
+                    <td>@ave.pico</td>
+                    <td>@(ave.vuela ? "Sí" : "No")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Perro> perros = new List<Perro>();
+    private List<Gato> gatos = new List<Gato>();
+    private List<Ave> aves = new List<Ave>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var PerrosGuardados = localStorage.GetItem<List<Perro>>("Perros");
+
+        if (PerrosGuardados != null)
+        {
+            perros = PerrosGuardados;
+        }
+
+        var gatossGuardados = localStorage.GetItem<List<Gato>>("Gatos");
+
+        if (gatossGuardados != null)
+        {
+            gatos = gatossGuardados;
+        }
+
+        var avesGuardadas = localStorage.GetItem<List<Ave>>("Aves");
+
+        if (avesGuardadas != null)
+        {
+            aves = avesGuardadas;
+        }
+
+        var cantidadAnimales = localStorage.GetItem<int>("CantidadAnimales");
+        if (cantidadAnimales > 0)
+        {
+            Animal.cantidadAnimal = cantidadAnimales;
+        }
+    }
+}

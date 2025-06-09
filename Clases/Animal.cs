@@ -4,6 +4,7 @@ namespace ExamenFinal.Clases
 {
     public class Animal
     {
+        public static int cantidadAnimal { get; set; } = 0;
 
         [Required(ErrorMessage =
         "Ingrese un nombre valido")] public string? nombre { get; set; }
