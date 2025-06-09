@@ -2,6 +2,7 @@
 @inject HttpClient Http
 @using ExamenFinal.Clases
 @inject Blazored.LocalStorage.ISyncLocalStorageService localStorage
+@inject NavigationManager NavigationManager
 
 <PageTitle>Weather</PageTitle>
 
@@ -28,6 +29,8 @@ else
                 <th>Domestico</th>
                 <th>Pico</th>
                 <th>Vuela</th>
+                <th>Editar</th>
+                <th>Borrar</th>
             </tr>
         </thead>
         <tbody>
@@ -43,6 +46,18 @@ else
                     <td>NA</td>
                     <td>NA</td>
                     <td>NA</td>
+                    <td>
+                        <button class="btn btn-warning"
+                                @onclick="@(() => NavigationManager.NavigateTo($"/Editar /{perro.nombre}"))">
+                            Editar
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger"
+                                @onclick="@(() => NavigationManager.NavigateTo($"/Borrar /{perro.nombre}"))">
+                            Borrar
+                        </button>
+                     </td>
                 </tr>
             }
             @foreach (var gato in gatos)
@@ -57,6 +72,18 @@ else
                     <td>@(gato.domestico? "Sí" : "No")</td>
                     <td>NA</td>
                     <td>NA</td>
+                    <td>
+                        <button class="btn btn-warning"
+                                @onclick="@(() => NavigationManager.NavigateTo($"/Editar /{gato.nombre}"))">
+                            Editar
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger"
+                                @onclick="@(() => NavigationManager.NavigateTo($"/Borrar /{gato.nombre}"))">
+                            Borrar
+                        </button>
+                    </td>
                 </tr>
             }
             @foreach (var ave in aves)
@@ -71,6 +98,18 @@ else
                     <td>NA</td>
                     <td>@ave.pico</td>
                     <td>@(ave.vuela ? "Sí" : "No")</td>
+                    <td>
+                        <button class="btn btn-warning"
+                                @onclick="@(() => NavigationManager.NavigateTo($"/Editar /{ave.nombre}"))">
+                            Editar
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger"
+                                @onclick="@(() => NavigationManager.NavigateTo($"/Borrar /{ave.nombre}"))">
+                            Borrar
+                        </button>
+                    </td>
                 </tr>
             }
         </tbody>

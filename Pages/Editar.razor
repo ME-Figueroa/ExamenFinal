@@ -1,0 +1,173 @@
+﻿@page "/Editar /{nombre}"
+@inject HttpClient Http
+
+@inject NavigationManager NavigationManager
+@using ExamenFinal.Clases
+@inject Blazored.LocalStorage.ISyncLocalStorageService localStorage
+
+<EditForm Model="@animal" onValidsubmit="@Guardar">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="container center text">
+        <div class="row m-3">
+            <div class=" col">
+                <InputText placeholder="Nombre" id="Nombre" class="form-control" @bind-Value="animal.nombre" />
+                <ValidationMessage For="() => animal.nombre" />
+            </div>
+            <div class="col">
+                <InputSelect id="Especie" class="form-select form-select-md" @bind-Value="animal.especie">
+                    <option value="">Seleccione la especie de su animal</option>
+                    <option value="Perro">Perro</option>
+                    <option value="Gato">Gato</option>
+                    <option value="Ave">Ave</option>
+                </InputSelect>
+                <ValidationMessage For="() => animal.especie" />
+            </div>
+            <div class="col">
+                <InputNumber placeholder="Edad" id="Edad" class="form-control" @bind-Value="animal.edad" />
+            </div>
+        </div>
+        <div class="row m-3">
+            @if (animal.especie == "Perro")
+            {
+                <div class="col">
+                    <label for="pico">Raza</label>
+                    <InputSelect id="Raza" class="form-select form-select-md" @bind-Value="perro.raza">
+                        <option value="">Seleccione la raza del perro</option>
+                        <option value="Labrador">Labrador</option>
+                        <option value="Pastor aleman">Pastor Aleman</option>
+                        <option value="otra">Otra</option>
+                    </InputSelect>
+                    <ValidationMessage For="() => perro.raza" />
+                </div>
+                <div class="col">
+                    <label for="pico">Tamaño: </label>
+                    <InputSelect id="tamaño" class="form-select form-select-md" @bind-Value="perro.tamaño">
+                        <option value="">Seleccione el tamaño del perro</option>
+                        <option value="Pequeño">Pequeño</option>
+                        <option value="Mediano">Mediano</option>
+                        <option value="Grande">Grande</option>
+                    </InputSelect>
+                    <ValidationMessage For="() => perro.tamaño" />
+                </div>
+            }
+            @if (animal.especie == "Gato")
+            {
+                <div class="col">
+                    <label for="pico">Tipo de pelaje</label>
+                    <InputSelect id="Pelaje" class="form-select form-select-md" @bind-Value="gato.pelaje">
+                        <option value="">Seleccione el tipo de pelaje del gato</option>
+                        <option value="Corto">Corto</option>
+                        <option value="Largo">Largo</option>
+                        <option value="Sin pelo">Sin pelo</option>
+                    </InputSelect>
+                    <ValidationMessage For="() => gato.pelaje" />
+                </div>
+                <div class="col">
+                    <label for="domestico">Es domestico:</label>
+                    <InputCheckbox id="domestico" class="form-check" @bind-Value="gato.domestico" />
+                </div>
+            }
+            @if (animal.especie == "Ave")
+            {
+                <div class="col">
+                    <label for="pico">Tipo de Pico</label>
+                    <InputSelect id="Pico" class="form-select form-select-md" @bind-Value="ave.pico">
+                        <option value="">Seleccione el tipo de pico del ave</option>
+                        <option value="Gancho">Gancho</option>
+                        <option value="Recto">Recto</option>
+                        <option value="Filtrador">Filtrador</option>
+                    </InputSelect>
+                    <ValidationMessage For="() => ave.pico" />
+                </div>
+                <div class="col">
+                    <label for="vuela">Vuela:</label>
+                    <InputCheckbox id="vuela" @bind-Value="ave.vuela" />
+                </div>
+            }
+        </div>
+        <div class="row text-center">
+            <div class="col 6">
+                <button class="btn btn-dark" type="submit">Guardar</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public string nombre { get; set; }
+
+    private Animal animal = new Animal();
+    private Perro perro = new Perro();
+    private Gato gato = new Gato();
+    private Ave ave = new Ave();
+
+    private List<Perro> perros = new List<Perro>();
+    private List<Gato> gatos = new List<Gato>();
+    private List<Ave> aves = new List<Ave>();
+
+    private void Guardar()
+    {
+        if (animal.especie == "Perro")
+        {
+            perro.nombre = animal.nombre;
+            perro.edad = animal.edad;
+
+            perros.Add(perro);
+            localStorage.SetItem("Perros", perros);
+        }
+        if (animal.especie == "Gato")
+        {
+            gato.nombre = animal.nombre;
+            gato.edad = animal.edad;
+
+            gatos.Add(gato);
+            localStorage.SetItem("Gatos", gatos);
+        }
+        if (animal.especie == "Ave")
+        {
+            ave.nombre = animal.nombre;
+            ave.edad = animal.edad;
+
+            aves.Add(ave);
+            localStorage.SetItem("Aves", aves);
+        }
+
+        NavigationManager.NavigateTo("/Pacientes");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var PerrosGuardados = localStorage.GetItem<List<Perro>>("Perros");
+
+        if (PerrosGuardados != null)
+        {
+            perros = PerrosGuardados;
+            animal = perros.FirstOrDefault(c=> c.nombre == nombre);
+        }
+
+        var gatossGuardados = localStorage.GetItem<List<Gato>>("Gatos");
+
+        if (gatossGuardados != null)
+        {
+            gatos = gatossGuardados;
+            animal = gatos.FirstOrDefault(c => c.nombre == nombre);
+
+        }
+
+        var avesGuardadas = localStorage.GetItem<List<Ave>>("Aves");
+
+        if (avesGuardadas != null)
+        {
+            aves = avesGuardadas;
+            animal = aves.FirstOrDefault(c => c.nombre == nombre);
+        }
+
+        var cantidadAnimales = localStorage.GetItem<int>("CantidadAnimales");
+        if (cantidadAnimales > 0)
+        {
+            Animal.cantidadAnimal = cantidadAnimales;
+        }
+    }
+}

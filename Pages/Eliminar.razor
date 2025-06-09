@@ -1,0 +1,68 @@
+﻿@using ExamenFinal.Clases
+@inject Blazored.LocalStorage.ISyncLocalStorageService localStorage
+@inject NavigationManager NavigationManager
+
+@page "/Borrar /{nombre}"
+@inject HttpClient Http
+
+<h1>Eliminando Paciente</h1>
+
+@code {
+    [Parameter]
+    public string nombre { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+            var PerrosGuardados = localStorage.GetItem<List<Perro>>("Perros");
+
+            if (PerrosGuardados != null)
+            {
+                var perroSeleccionado = PerrosGuardados.FirstOrDefault(c => c.nombre == nombre);
+                if (perroSeleccionado != null)
+                {
+                    PerrosGuardados.Remove(perroSeleccionado);
+                    localStorage.SetItem("Perros", PerrosGuardados);
+                }
+            }
+        
+
+        
+            var gatossGuardados = localStorage.GetItem<List<Gato>>("Gatos");
+
+            if (gatossGuardados != null)
+            {
+                var gatoSeleccionado = gatossGuardados.FirstOrDefault(c => c.nombre == nombre);
+                if (gatoSeleccionado != null)
+                {
+                    gatossGuardados.Remove(gatoSeleccionado);
+                    localStorage.SetItem("Perros", gatossGuardados);
+                }
+            }
+        
+
+            var avesGuardadas = localStorage.GetItem<List<Ave>>("Aves");
+
+            if (avesGuardadas != null)
+            {
+                var aveSeleccionada = avesGuardadas.FirstOrDefault(c => c.nombre == nombre);
+                if (aveSeleccionada != null)
+                {
+                    avesGuardadas.Remove(aveSeleccionada);
+                    localStorage.SetItem("Aves", avesGuardadas);
+                }
+            }
+        
+
+        var cantidadAnimales = localStorage.GetItem<int>("CantidadAnimales");
+        if (cantidadAnimales > 0)
+        {
+            Animal.cantidadAnimal = cantidadAnimales;
+        }
+
+        Animal.cantidadAnimal--;
+        localStorage.SetItem("CantidadAnimales", Animal.cantidadAnimal);
+
+        NavigationManager.NavigateTo("/Pacientes");
+    }
+}
